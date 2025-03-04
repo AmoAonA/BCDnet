@@ -1,0 +1,19 @@
+OUTPUT_DIR: "./exps/buchong-3_cls"
+INPUT:
+  DATASET: "PRW"
+  DATA_ROOT: "/media/data/lzj/dataset/PRW"
+  BATCH_SIZE_TRAIN: 3
+  MIN_SIZE : 900
+  MAX_SIZE : 1500
+SOLVER:
+  MAX_EPOCHS: 15
+  BASE_LR: 0.003
+MODEL:
+  LOSS:
+    TYPE: 'OIM'
+    OIM_EPS: 0.1
+    LUT_SIZE: 482
+    CQ_SIZE: 500
+NVIDIA_DEVICE: 2 
+EVAL_PERIOD: 5
+CKPT_PERIOD: 5

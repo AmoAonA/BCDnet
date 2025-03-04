@@ -1,0 +1,11 @@
+OUTPUT_DIR: "./exp_cuhk"
+INPUT:
+  DATASET: "CUHK-SYSU"
+  DATA_ROOT: "/media/data/lzj/dataset/G2APS"
+SOLVER:
+  MAX_EPOCHS: 20
+MODEL:
+  LOSS:
+    LUT_SIZE: 2078
+    CQ_SIZE: 2000
+NVIDIA_DEVICE:  1
