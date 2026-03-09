@@ -113,11 +113,6 @@ This codebase is built upon [COAT](https://github.com/Kitware/COAT). We thank th
 
 《BCDnet：面向行人搜索的平衡耦合与解耦网络》官方实现，发表于 **Pattern Recognition, Volume 176, 2026, 113241**。
 
-> 卢正杰, 彭金佳, 王慧冰, 傅仙平,
-> BCDnet: Balanced coupling and decoupling network for person search,
-> *Pattern Recognition*, Volume 176, 2026, 113241.
-> https://doi.org/10.1016/j.patcog.2026.113241
-
 ### ⚠️ 重要说明
 
 本项工作的核心研究与实验实际上在 **2023 年已基本完成**，但直到 **2026 年才在 Pattern Recognition（第 176 卷）正式发表**。由于时间跨度较长（近三年），在整理开源代码时，很多具体的实验细节已经记不太清楚了，甚至 `main` 分支中整理后的代码也可能存在一些小问题。
