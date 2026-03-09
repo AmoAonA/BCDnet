@@ -2,13 +2,13 @@
 
 **BCDnet: Balanced Coupling and Decoupling Network for Person Search**
 
-论文《BCDnet：面向行人搜索的平衡耦合与解耦网络》的官方实现（Pattern Recognition 2025）。
+论文《BCDnet：面向行人搜索的平衡耦合与解耦网络》的官方实现（Pattern Recognition 2026）。
 
 ---
 
 ## ⚠️ 重要说明
 
-本项工作的核心研究与实验实际上在 **2023 年已基本完成**，但由于种种原因直到 **2025 年底才被 Pattern Recognition 接收发表**。由于时间跨度较长（近两年），在整理开源代码时，很多具体的实验细节已经记不太清楚了，甚至 `main` 分支中整理后的代码也可能存在一些小问题。
+本项工作的核心研究与实验实际上在 **2023 年已基本完成**，但由于种种原因直到 **2026 年初才被 Pattern Recognition 接收发表**。由于时间跨度较长（练习时长两年半），在整理开源代码时，很多具体的实验细节已经记不太清楚了，甚至 `main` 分支中整理后的代码也可能存在一些小问题。
 
 因此，我们保留了 **`old` 分支**，其中包含了**完整的实验过程**，包括所有中间实验版本的模型文件（`exp1.py` ~ `exp11.py`、各种 `coam_*.py`、`coat_*.py` 等）。如果 `main` 分支的代码运行遇到问题，可以参考 `old` 分支中的原始实验代码。
 
@@ -79,10 +79,10 @@ python train.py --cfg configs/cuhk_sysu.yaml --eval --ckpt /path/to/checkpoint.p
 如果本工作对您有帮助，请引用：
 
 ```bibtex
-@article{bcdnet2025,
+@article{bcdnet2026,
   title={BCDnet: Balanced Coupling and Decoupling Network for Person Search},
   journal={Pattern Recognition},
-  year={2025}
+  year={2026}
 }
 ```
 
