@@ -1,8 +1,6 @@
 # BCDnet
 
-**BCDnet: Balanced Coupling and Decoupling Network for Person Search**
-
-论文《BCDnet：面向行人搜索的平衡耦合与解耦网络》的官方实现（Pattern Recognition 2026）。
+**BCDnet: Balanced Coupling and Decoupling Network for Person Search（Pattern Recognition 2026）**。
 
 ---
 
