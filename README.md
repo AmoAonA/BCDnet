@@ -1,65 +1,82 @@
 # BCDnet
 
-Official implementation of **"BCDnet: Balanced Coupling and Decoupling Network for Person Search"** (Pattern Recognition 2025).
+**BCDnet: Balanced Coupling and Decoupling Network for Person Search**
 
-## Overview
+论文《BCDnet：面向行人搜索的平衡耦合与解耦网络》的官方实现（Pattern Recognition 2025）。
 
-BCDnet is an end-to-end person search framework that balances the coupling and decoupling between pedestrian detection and re-identification tasks. Built upon a cascaded architecture with multi-stage ROI heads and WaveMLP-based feature processing.
+---
 
-## Requirements
+## ⚠️ 重要说明
+
+本项工作的核心研究与实验实际上在 **2023 年已基本完成**，但由于种种原因直到 **2025 年底才被 Pattern Recognition 接收发表**。由于时间跨度较长（近两年），在整理开源代码时，很多具体的实验细节已经记不太清楚了，甚至 `main` 分支中整理后的代码也可能存在一些小问题。
+
+因此，我们保留了 **`old` 分支**，其中包含了**完整的实验过程**，包括所有中间实验版本的模型文件（`exp1.py` ~ `exp11.py`、各种 `coam_*.py`、`coat_*.py` 等）。如果 `main` 分支的代码运行遇到问题，可以参考 `old` 分支中的原始实验代码。
+
+## 概述
+
+BCDnet 是一个端到端的行人搜索框架，旨在平衡行人检测与重识别（Re-ID）任务之间的耦合与解耦关系。基于级联架构，采用多阶段 ROI Head 和 WaveMLP 特征处理模块。
+
+## 环境要求
 
 - Python >= 3.7
 - PyTorch >= 1.9.0
 - torchvision >= 0.10.0
 
-Install dependencies:
+安装依赖：
 ```bash
 pip install -r requirements.txt
 ```
 
-## Data Preparation
+## 数据准备
 
-1. Download [CUHK-SYSU](https://github.com/ShuangLI59/person_search) and/or [PRW](https://github.com/liangzheng06/PRW-baseline) datasets.
-2. Place them under `data/` directory:
+1. 下载 [CUHK-SYSU](https://github.com/ShuangLI59/person_search) 和/或 [PRW](https://github.com/liangzheng06/PRW-baseline) 数据集。
+2. 将数据集放置在 `data/` 目录下：
 ```
 data/
 ├── CUHK-SYSU/
 └── PRW-v16.04.20/
 ```
 
-## Training
+## 训练
 
 ```bash
 python train.py --cfg configs/cuhk_sysu.yaml
 ```
 
-## Evaluation
+## 评估
 
 ```bash
 python train.py --cfg configs/cuhk_sysu.yaml --eval --ckpt /path/to/checkpoint.pth
 ```
 
-## Project Structure
+## 项目结构
 
 ```
-├── configs/          # Configuration YAML files
-├── datasets/         # Dataset loading and preprocessing
-├── engines/          # Training and evaluation engines
-├── loss/             # Loss functions (OIM, Softmax)
+├── configs/            # 配置文件（YAML）
+├── datasets/           # 数据集加载与预处理
+├── engines/            # 训练与评估引擎
+├── loss/               # 损失函数（OIM、Softmax）
 ├── models/
-│   ├── backbone/     # ResNet backbone
-│   ├── bcdnet.py     # BCDnet model (main model)
-│   ├── head.py       # Detection head
-│   └── wavemlp_aug.py # WaveMLP feature augmentation module
-├── utils/            # Utility functions
-├── train.py          # Training & evaluation entry point
-├── defaults.py       # Default configuration
-└── vis.py            # Visualization tools
+│   ├── backbone/       # ResNet 骨干网络
+│   ├── bcdnet.py       # BCDnet 模型（核心模型）
+│   ├── head.py         # 检测头
+│   └── wavemlp_aug.py  # WaveMLP 特征增强模块
+├── utils/              # 工具函数
+├── train.py            # 训练与评估入口
+├── defaults.py         # 默认配置
+└── vis.py              # 可视化工具
 ```
 
-## Citation
+## 分支说明
 
-If you find this work useful, please cite:
+| 分支 | 内容 | 说明 |
+|------|------|------|
+| `main` | 最小化的开源代码 | 仅保留最终模型和必要文件，适合使用和参考 |
+| `old` | 完整实验过程 | 包含所有中间实验版本，如遇问题可查阅 |
+
+## 引用
+
+如果本工作对您有帮助，请引用：
 
 ```bibtex
 @article{bcdnet2025,
@@ -69,6 +86,6 @@ If you find this work useful, please cite:
 }
 ```
 
-## Acknowledgments
+## 致谢
 
-This codebase is built upon [COAT](https://github.com/Kitware/COAT). We thank the authors for their excellent work.
+本代码基于 [COAT](https://github.com/Kitware/COAT) 开发，感谢原作者的优秀工作。
