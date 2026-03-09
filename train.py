@@ -10,28 +10,11 @@ from torch.cuda import amp
 
 from datasets import build_test_loader, build_train_loader
 from defaults import get_default_cfg
-from engines.engine import evaluate_performance, train_one_epoch
-# from models.alb_pn import COAT # my_baseline no pn
-# from models.coat import COAT # baseline
-# from models.coam_att_two_defor import COAT # fixup
-# from models.coam_two_baseline import COAT # two_head_nae
-# from models.coat610242 import COAT # exp4
-# from models.baseline import COAT # exp3 baseline
-# from models.exp1 import COAT # exp1
-# from models.exp2 import COAT # exp2
-# from models.exp45 import COAT # exp4.5
-
-# from models.exp47 import COAT
-# from models.coam_att_two import COAT # two_head
-# from models.coam_two_des import COAT # fixup to hybrid
-# from models.coam_pb import COAT
-# from models.exp35 import COAT  # exp 3.5
-# from models.stage import COAT
-from models.Sparsercnn import Sparsercnn
+from engines.engine import evaluate_performance, train_one_epoch_
+from models.bcdnet import COAT
 from utils.utils import mkdir, resume_from_ckpt, save_on_master, set_random_seed, write_text
 
 from loss.softmax import SoftmaxLoss
-
 
 def main(args):
     cfg = get_default_cfg()
@@ -39,7 +22,6 @@ def main(args):
         cfg.merge_from_file(args.cfg_file)
     cfg.merge_from_list(args.opts)
     cfg.freeze()
-
     os.environ["CUDA_VISIBLE_DEVICES"] = str(cfg.NVIDIA_DEVICE)
     device = torch.device(cfg.DEVICE,)
 
@@ -51,7 +33,7 @@ def main(args):
         set_random_seed(cfg.SEED)
 
     write_text(sentence="Creating model", fpath=os.path.join(output_dir, 'os.txt'))
-    model = Sparsercnn()
+    model = COAT(cfg)
     model.to(device)
 
     write_text(sentence="Loading data", fpath=os.path.join(output_dir, 'os.txt'))
@@ -60,12 +42,15 @@ def main(args):
 
     softmax_criterion_s2 = None
     softmax_criterion_s3 = None
+    softmax_criterion_s4 = None
+
     if cfg.MODEL.LOSS.USE_SOFTMAX:
         softmax_criterion_s2 = SoftmaxLoss(cfg)
         softmax_criterion_s3 = SoftmaxLoss(cfg)
         softmax_criterion_s2.to(device)
         softmax_criterion_s3.to(device)
-
+        softmax_criterion_s4 = SoftmaxLoss(cfg)
+        softmax_criterion_s4.to(device)
     if args.eval:
         assert args.ckpt, "--ckpt must be specified when --eval enabled"
         resume_from_ckpt(args.ckpt, model)
@@ -88,12 +73,11 @@ def main(args):
     if cfg.MODEL.LOSS.USE_SOFTMAX:
         params_softmax_s2 = [p for p in softmax_criterion_s2.parameters() if p.requires_grad]
         params_softmax_s3 = [p for p in softmax_criterion_s3.parameters() if p.requires_grad]
+        params_softmax_s4 = [p for p in softmax_criterion_s4.parameters() if p.requires_grad]
         params.extend(params_softmax_s2)
         params.extend(params_softmax_s3)
-    #optimizer = torch.optim.Adam(
-    #    params,
-    #    lr=cfg.SOLVER.BASE_LR,
-    #    weight_decay=cfg.SOLVER.WEIGHT_DECAY,)
+        params.extend(params_softmax_s4)
+
     optimizer = torch.optim.SGD(
         params,
         lr=cfg.SOLVER.BASE_LR,
@@ -119,18 +103,11 @@ def main(args):
         f.write(cfg.dump())
     write_text(sentence="Full config is saved to {}".format(path), fpath=os.path.join(output_dir, 'os.txt'))
     tfboard = None
-    if cfg.TF_BOARD:
-        from torch.utils.tensorboard import SummaryWriter
-
-        tf_log_path = osp.join(output_dir, "tf_log")
-        mkdir(tf_log_path)
-        tfboard = SummaryWriter(log_dir=tf_log_path)
-        write_text("TensorBoard files are saved to {}".format(tf_log_path), fpath=osp.join(output_dir, 'os.txt'))
 
     print("Start training...")
     start_time = time.time()
     for epoch in range(start_epoch, cfg.SOLVER.MAX_EPOCHS):
-        train_one_epoch(
+        train_one_epoch_(
                         cfg=cfg,
                         model=model,
                         optimizer=optimizer,
@@ -141,8 +118,9 @@ def main(args):
                         tfboard=tfboard,
                         softmax_criterion_s2=softmax_criterion_s2,
                         softmax_criterion_s3=softmax_criterion_s3,
+                        softmax_criterion_s4=softmax_criterion_s4,
                         outsys_dir=output_dir
-                        )
+        )
         lr_scheduler.step()
 
         if (epoch + 1) % cfg.EVAL_PERIOD == 0 or epoch == cfg.SOLVER.MAX_EPOCHS - 1:
