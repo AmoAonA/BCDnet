@@ -1,0 +1,74 @@
+# BCDnet
+
+Official implementation of **"BCDnet: Balanced Coupling and Decoupling Network for Person Search"** (Pattern Recognition 2025).
+
+## Overview
+
+BCDnet is an end-to-end person search framework that balances the coupling and decoupling between pedestrian detection and re-identification tasks. Built upon a cascaded architecture with multi-stage ROI heads and WaveMLP-based feature processing.
+
+## Requirements
+
+- Python >= 3.7
+- PyTorch >= 1.9.0
+- torchvision >= 0.10.0
+
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Data Preparation
+
+1. Download [CUHK-SYSU](https://github.com/ShuangLI59/person_search) and/or [PRW](https://github.com/liangzheng06/PRW-baseline) datasets.
+2. Place them under `data/` directory:
+```
+data/
+├── CUHK-SYSU/
+└── PRW-v16.04.20/
+```
+
+## Training
+
+```bash
+python train.py --cfg configs/cuhk_sysu.yaml
+```
+
+## Evaluation
+
+```bash
+python train.py --cfg configs/cuhk_sysu.yaml --eval --ckpt /path/to/checkpoint.pth
+```
+
+## Project Structure
+
+```
+├── configs/          # Configuration YAML files
+├── datasets/         # Dataset loading and preprocessing
+├── engines/          # Training and evaluation engines
+├── loss/             # Loss functions (OIM, Softmax)
+├── models/
+│   ├── backbone/     # ResNet backbone
+│   ├── bcdnet.py     # BCDnet model (main model)
+│   ├── head.py       # Detection head
+│   └── wavemlp_aug.py # WaveMLP feature augmentation module
+├── utils/            # Utility functions
+├── train.py          # Training & evaluation entry point
+├── defaults.py       # Default configuration
+└── vis.py            # Visualization tools
+```
+
+## Citation
+
+If you find this work useful, please cite:
+
+```bibtex
+@article{bcdnet2025,
+  title={BCDnet: Balanced Coupling and Decoupling Network for Person Search},
+  journal={Pattern Recognition},
+  year={2025}
+}
+```
+
+## Acknowledgments
+
+This codebase is built upon [COAT](https://github.com/Kitware/COAT). We thank the authors for their excellent work.
